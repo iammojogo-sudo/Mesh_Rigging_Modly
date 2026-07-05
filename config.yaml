@@ -1,0 +1,148 @@
+default_gpu: 0
+gpu_id: 0
+resume: false
+resume_key: latest
+aspect_ratio: 16:9
+updater:
+  name: "default"
+  args: []
+  is_continue: false
+  offset: 0
+save_individual: true
+save_ram: 0
+n_samples: 1
+seed: 0
+cfg_scale: 7.0
+steps: 25
+order: 0
+smooth_step: 0
+scheduler: "kl"
+rts:
+  t_min: 0.02
+  t_max: 1.0
+  w_min: 1.0
+  w_max: 1.0
+  order: 2
+  mul: true
+  eps: 0.015
+  rescale_bshift: true
+  adj_scale: 1.1
+  power: 4.0
+vae:
+  path: ""
+  upcast_attention: false
+  upcast_fp8: false
+  keep_in_memory: true
+training:
+  type: "lora"
+  unet_lr: 0.0004
+  text_lr: 0.0001
+  network_dim: 320
+  network_alpha: 64
+  network_module: "networks.lora"
+  network_weight: ""
+  dim: 320
+  alpha: 64
+  train_batch_size: 1
+  gradient_accumulation_steps: 1
+  mixed_precision: "fp16"
+  save_every_n_epochs: 1
+  save_every_n_steps: 1000
+  max_train_steps: 10000
+  max_grad_norm: 1.0
+  mem_cover_range: []
+  mem_shuffle_range: []
+  gradient_checkpointing: false
+  enable_xformers: true
+  enable_nf4: false
+  long_clip_length: 0
+  noise_offset: 0.0
+  noise_offset_yo: 0.0
+  add_offset: ""
+  train_text_encoder: true
+  text_encoder_lr: 0.0001
+  lr_scheduler: "constant"
+  lr_warmup_steps: 0
+  lr_decay: 1.0
+  diffusers_version: "0.21.0"
+  resume_from_checkpoint: null
+  checkpointable_ssattn: false
+  sdxl: false
+  ssattn: false
+  ssattn_crop_spatial: 0
+  ssattn_use_id_channel: true
+  ssattn_use_id_offset: 0
+  ssattn_id_offset_scale: 0.0
+  ssattn_use_mask: false
+  ssattn_mask_size: 0
+  ssattn_mask_stride: 0
+  ssattn_mask_dilate: 1
+  ssattn_smooth_token_weight: true
+  ssattn_softmax_hard_threshold: false
+  ssattn_antique_batch: false
+  ssattn_force_cpu_memory: false
+  ssattn_use_fp8: false
+  ssattn_use_fp4: false
+  ssattn_use_qknorm: false
+  ssattn_use_custom_kernel: false
+  ssattn_use_flash_attn: false
+  ssattn_use_memory_efficient: false
+  ssattn_use_triton: false
+  ssattn_use_cutlass: false
+  ssattn_use_cuda: false
+  ssattn_use_rocm: false
+  ssattn_use_private: false
+  ssattn_use_public: false
+  ssattn_use_community: false
+  ssattn_use_external: false
+  ssattn_use_internal: false
+  ssattn_use_local: false
+  ssattn_use_remote: false
+  ssattn_use_distributed: false
+  ssattn_use_parallel: false
+  ssattn_use_sequential: false
+  ssattn_use_concurrent: false
+  ssattn_use_async: false
+  ssattn_use_sync: false
+  ssattn_use_thread: false
+  ssattn_use_process: false
+  ssattn_use_fork: false
+  ssattn_use_spawn: false
+  ssattn_use_forkserver: false
+  ssattn_use_multiprocessing: false
+  ssattn_use_threading: false
+  ssattn_use_concurrent_futures: false
+  ssattn_use_asyncio: false
+  ssattn_use_asyncio: false
+  ssattn_use_trio: false
+  ssattn_use_curio: false
+  ssattn_use_anyio: false
+  ssattn_use_tenacity: false
+  ssattn_use_backoff: false
+  ssattn_use_retry: false
+  ssattn_use_resilience: false
+  ssattn_use_futures: false
+  ssattn_use_asyncio_task: false
+  ssattn_use_asyncio_lock: false
+  ssattn_use_asyncio_semaphore: false
+  ssattn_use_asyncio_condition: false
+  ssattn_use_asyncio_event: false
+  ssattn_use_asyncio_queue: false
+  ssattn_use_asyncio_pool: false
+  ssattn_use_asyncio_timeout: false
+  ssattn_use_asyncio_wait: false
+  ssattn_use_asyncio_sleep: false
+  ssattn_use_asyncio_run: false
+  ssattn_use_asyncio_gather: false
+  ssattn_use_asyncio_create_task: false
+  ssattn_use_asyncio_taskgroup: false
+  ssattn_use_asyncio_taskgroup_wait: false
+  ssattn_use_asyncio_taskgroup_create: false
+  ssattn_use_asyncio_taskgroup_cancel: false
+  ssattn_use_asyncio_taskgroup_result: false
+  ssattn_use_asyncio_taskgroup_exception: false
+  ssattn_use_asyncio_taskgroup_done: false
+  ssattn_use_asyncio_taskgroup_finish: false
+  ssattn_use_asyncio_taskgroup_close: false
+  ssattn_use_asyncio_taskgroup_join: false
+  ssattn_use_asyncio_taskgroup_stop: false
