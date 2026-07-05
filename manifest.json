@@ -1,0 +1,81 @@
+{
+  "id": "riganything_motion",
+  "name": "RigAnything Motion Transfer",
+  "type": "model",
+  "source": "https://github.com/iammojogo-sudo/riganything_motion",
+  "description": "Auto-rig any 3D model (human, quad, multi) and apply text-to-motion animations. Uses HY-Motion-1.0 Lite for motion generation.",
+  "version": "1.0.0",
+  "author": "iammojogo",
+  "vram_gb": 3,
+  "tags": [
+    "auto-rig",
+    "motion",
+    "text-to-motion",
+    "rigging"
+  ],
+  "nodes": [
+    {
+      "id": "rig_and_motion",
+      "name": "Rig & Apply Motion",
+      "input": "model",
+      "inputs": ["model", "prompt"],
+      "output": "model",
+      "download_check": "latest.ckpt",
+      "params_schema": [
+        {
+          "id": "simplify_mesh",
+          "label": "Simplify Mesh",
+          "type": "select",
+          "default": "1",
+          "options": [
+            { "value": "1", "label": "Yes" },
+            { "value": "0", "label": "No" }
+          ]
+        },
+        {
+          "id": "target_face_count",
+          "label": "Target Face Count",
+          "type": "int",
+          "default": 8192,
+          "min": 1000,
+          "max": 50000
+        },
+        {
+          "id": "motion_enhance",
+          "label": "Enhance Motion Prompt",
+          "type": "select",
+          "default": "1",
+          "options": [
+            { "value": "1", "label": "Enabled" },
+            { "value": "0", "label": "Disabled" }
+          ]
+        },
+        {
+          "id": "guidance_scale",
+          "label": "Guidance Scale",
+          "type": "float",
+          "default": 7.0,
+          "min": 1.0,
+          "max": 10.0
+        },
+        {
+          "id": "num_inference_steps",
+          "label": "Inference Steps",
+          "type": "int",
+          "default": 25,
+          "min": 10,
+          "max": 50
+        },
+        {
+          "id": "seed",
+          "label": "Seed",
+          "type": "int",
+          "default": 0,
+          "min": 0,
+          "max": 4294967295
+        }
+      ]
+    }
+  ],
+  "generator_class": "RigAnythingMotionGenerator"
+}
