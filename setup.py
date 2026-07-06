@@ -104,7 +104,14 @@ def setup(
 
     # ---- Platform-specific extras ----
     if not is_mac:
-        pip(venv, "install", "open3d", "pymeshlab")
+        try:
+            pip(venv, "install", "open3d")
+        except subprocess.CalledProcessError:
+            print("[setup] WARNING: open3d installation failed (non-fatal)")
+        try:
+            pip(venv, "install", "pymeshlab")
+        except subprocess.CalledProcessError:
+            print("[setup] WARNING: pymeshlab installation failed (non-fatal)")
 
     print("[setup] Done. Venv ready at:", venv)
 
