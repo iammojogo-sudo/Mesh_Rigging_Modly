@@ -161,7 +161,13 @@ class RigAnythingGenerator(BaseGenerator):
             "--mesh_path", mesh_path.as_posix(),
         ]
         print(f"[RigAnything] Running inference on {mesh_path.name} ...")
-        subprocess.run(cmd, check=True)
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+            if result.returncode != 0:
+                print(f"[RigAnything] Inference stderr: {result.stderr.strip()}")
+                raise RuntimeError(f"RigAnything inference failed (exit {result.returncode})")
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("RigAnything inference timed out after 600s")
         items = list(out_dir.glob("*.npz"))
         if not items:
             raise RuntimeError("RigAnything produced no .npz output")
@@ -177,7 +183,7 @@ class RigAnythingGenerator(BaseGenerator):
             "--save_path", out_dir.as_posix(),
             "--mesh_path", mesh_path.as_posix(),
         ]
-        subprocess.run(cmd, check=True)
+        subprocess.run(cmd, capture_output=True, text=True, timeout=300, check=True)
         rigged = npz_path.with_name(f"{npz_path.stem}_rig.glb")
         if rigged.exists():
             return rigged

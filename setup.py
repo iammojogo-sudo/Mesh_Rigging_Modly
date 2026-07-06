@@ -86,6 +86,7 @@ def setup(
         "numpy",
         "Pillow",
         "huggingface_hub>=0.20.0",
+        "rich",
         "trimesh",
         "pyyaml",
         "easydict",
@@ -112,6 +113,8 @@ def setup(
             pip(venv, "install", "pymeshlab")
         except subprocess.CalledProcessError:
             print("[setup] WARNING: pymeshlab installation failed (non-fatal)")
+    else:
+        print("[setup] Skipping open3d/pymeshlab on macOS")
 
     print("[setup] Done. Venv ready at:", venv)
 
