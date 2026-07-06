@@ -1,5 +1,5 @@
 """
-RigAnything Motion — extension setup script.
+RigAnything — extension setup script.
 
 Creates an isolated venv and installs all required dependencies.
 Called by Modly at extension install time with:
@@ -81,23 +81,11 @@ def setup(
              "--index-url", "https://download.pytorch.org/whl/cu118")
 
     # ---- Core dependencies ----
-    print("[setup] Installing core dependencies ...")
+    print("[setup] Installing dependencies ...")
     pip(venv, "install",
         "numpy",
         "Pillow",
         "huggingface_hub>=0.20.0",
-        "diffusers>=0.31.0",
-        "transformers>=4.46.0",
-        "accelerate",
-        "safetensors",
-        "sentencepiece",
-        "tiktoken",
-        "protobuf",
-    )
-
-    # ---- 3D pipeline dependencies ----
-    print("[setup] Installing 3D pipeline dependencies ...")
-    pip(venv, "install",
         "trimesh",
         "pyyaml",
         "easydict",
@@ -116,19 +104,7 @@ def setup(
 
     # ---- Platform-specific extras ----
     if not is_mac:
-        print("[setup] Installing GPU-accelerated 3D libraries ...")
-        try:
-            pip(venv, "install", "open3d")
-        except subprocess.CalledProcessError:
-            print("[setup] WARNING: open3d installation failed (non-fatal)")
-        try:
-            pip(venv, "install", "pymeshlab")
-        except subprocess.CalledProcessError:
-            print("[setup] WARNING: pymeshlab installation failed (non-fatal)")
-        pip(venv, "install",
-            "opencv-python-headless",
-            "scikit-image",
-        )
+        pip(venv, "install", "open3d", "pymeshlab")
 
     print("[setup] Done. Venv ready at:", venv)
 

@@ -1,24 +1,23 @@
 {
-  "id": "riganything_motion",
-  "name": "RigAnything Motion",
+  "id": "riganything",
+  "name": "RigAnything",
   "type": "model",
   "source": "https://github.com/iammojogo-sudo/Mesh_Rigging_Modly",
-  "description": "Auto-rig any 3D model (human, quad, multi) and apply text-to-motion animations using HY-Motion-1.0 Lite.",
+  "description": "Auto-rig any 3D mesh (human, quad, multi, etc.) using RigAnything template-free autoregressive rigging.",
   "version": "1.0.0",
   "author": "iammojogo",
   "vram_gb": 4,
   "tags": [
     "auto-rig",
     "rigging",
-    "text-to-motion",
-    "animation"
+    "skeleton"
   ],
   "nodes": [
     {
-      "id": "rig_and_motion",
-      "name": "Rig & Animate",
+      "id": "rig",
+      "name": "Rig Mesh",
       "input": "mesh",
-      "inputs": ["mesh", "text"],
+      "inputs": ["mesh"],
       "output": "mesh",
       "hf_repo": "Isabellaliu/RigAnything",
       "download_check": "riganything_ckpt.pt",
@@ -43,51 +42,9 @@
           "min": 1000,
           "max": 50000,
           "tooltip": "Target number of faces after simplification (only used when Simplify Mesh is Yes)."
-        },
-        {
-          "id": "enable_motion",
-          "label": "Apply Motion",
-          "type": "select",
-          "default": "1",
-          "options": [
-            { "value": "1", "label": "Yes" },
-            { "value": "0", "label": "No (rig-only)" }
-          ],
-          "tooltip": "Generate and apply text-to-motion animation to the rigged model."
-        },
-        {
-          "id": "guidance_scale",
-          "label": "Motion Guidance Scale",
-          "type": "float",
-          "default": 5.0,
-          "min": 1.0,
-          "max": 10.0,
-          "step": 0.5,
-          "tooltip": "Classifier-free guidance strength for motion generation. Higher = more literal."
-        },
-        {
-          "id": "num_inference_steps",
-          "label": "Motion Quality",
-          "type": "select",
-          "default": 25,
-          "options": [
-            { "value": 10, "label": "Fast" },
-            { "value": 25, "label": "Balanced" },
-            { "value": 50, "label": "High" }
-          ],
-          "tooltip": "Number of diffusion steps for motion generation."
-        },
-        {
-          "id": "seed",
-          "label": "Seed",
-          "type": "int",
-          "default": -1,
-          "min": -1,
-          "max": 4294967295,
-          "tooltip": "Seed for reproducibility. Set to -1 for a random seed."
         }
       ]
     }
   ],
-  "generator_class": "RigAnythingMotionGenerator"
+  "generator_class": "RigAnythingGenerator"
 }
