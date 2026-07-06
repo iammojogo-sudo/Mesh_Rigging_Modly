@@ -209,9 +209,30 @@ class RigAnythingGenerator(BaseGenerator):
         if (src / "inference.py").exists():
             if str(src) not in sys.path:
                 sys.path.insert(0, str(src))
+            self._patch_vis_skel(src)
             return
         print("[RigAnything] Downloading RigAnything source code from GitHub ...")
         self._download_github_zip(RIGANYTHING_GITHUB, src, "RigAnything-main")
+        self._patch_vis_skel(src)
+
+    @staticmethod
+    def _patch_vis_skel(src: Path) -> None:
+        vis = src / "inference_utils" / "vis_skel.py"
+        if not vis.exists():
+            return
+        text = vis.read_text(encoding="utf-8")
+        original = text
+        text = text.replace(
+            'bone.tail = bone.head + Vector([0, 0, 0.1])',
+            'bone.tail = bone.head + Vector([0, 0, 1.0])',
+        )
+        text = text.replace(
+            "modifier.object = armature\n\n        # Assign vertex groups",
+            "modifier.object = armature\n        obj.parent = armature\n\n        # Assign vertex groups",
+        )
+        if text != original:
+            vis.write_text(text, encoding="utf-8")
+            print("[RigAnything] Patched vis_skel.py for Godot compatibility.")
 
     def _download_github_zip(self, url: str, dest: Path, top_dir: str) -> None:
         dest.mkdir(parents=True, exist_ok=True)
