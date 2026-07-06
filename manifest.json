@@ -19,7 +19,7 @@
       "name": "Rig & Animate",
       "input": "mesh",
       "inputs": ["mesh", "text"],
-      "output": "model",
+      "output": "mesh",
       "hf_repo": "Isabellaliu/RigAnything",
       "download_check": "riganything/riganything_ckpt.pt",
       "hf_skip_prefixes": [],
