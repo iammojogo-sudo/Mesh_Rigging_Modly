@@ -87,6 +87,7 @@ def setup(
         "Pillow",
         "huggingface_hub>=0.20.0",
         "rich",
+        "transformers",
         "trimesh",
         "pyyaml",
         "easydict",
