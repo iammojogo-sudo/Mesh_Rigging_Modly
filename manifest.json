@@ -1,26 +1,28 @@
 {
   "id": "riganything_motion",
-  "name": "RigAnything Motion Transfer",
+  "name": "RigAnything Motion",
   "type": "model",
-  "source": "https://github.com/iammojogo-sudo/riganything_motion",
-  "description": "Auto-rig any 3D model (human, quad, multi) and apply text-to-motion animations. Uses HY-Motion-1.0 Lite for motion generation.",
+  "source": "https://github.com/iammojogo-sudo/Mesh_Rigging_Modly",
+  "description": "Auto-rig any 3D model (human, quad, multi) and apply text-to-motion animations using HY-Motion-1.0 Lite.",
   "version": "1.0.0",
   "author": "iammojogo",
-  "vram_gb": 3,
+  "vram_gb": 4,
   "tags": [
     "auto-rig",
-    "motion",
+    "rigging",
     "text-to-motion",
-    "rigging"
+    "animation"
   ],
   "nodes": [
     {
       "id": "rig_and_motion",
-      "name": "Rig & Apply Motion",
+      "name": "Rig & Animate",
       "input": "model",
       "inputs": ["model", "prompt"],
       "output": "model",
-      "download_check": "latest.ckpt",
+      "hf_repo": "Isabellaliu/RigAnything",
+      "download_check": "riganything/latest.ckpt",
+      "hf_skip_prefixes": [],
       "params_schema": [
         {
           "id": "simplify_mesh",
@@ -30,7 +32,8 @@
           "options": [
             { "value": "1", "label": "Yes" },
             { "value": "0", "label": "No" }
-          ]
+          ],
+          "tooltip": "Simplify the mesh before rigging for better performance."
         },
         {
           "id": "target_face_count",
@@ -38,41 +41,50 @@
           "type": "int",
           "default": 8192,
           "min": 1000,
-          "max": 50000
+          "max": 50000,
+          "tooltip": "Target number of faces after simplification (only used when Simplify Mesh is Yes)."
         },
         {
-          "id": "motion_enhance",
-          "label": "Enhance Motion Prompt",
+          "id": "enable_motion",
+          "label": "Apply Motion",
           "type": "select",
           "default": "1",
           "options": [
-            { "value": "1", "label": "Enabled" },
-            { "value": "0", "label": "Disabled" }
-          ]
+            { "value": "1", "label": "Yes" },
+            { "value": "0", "label": "No (rig-only)" }
+          ],
+          "tooltip": "Generate and apply text-to-motion animation to the rigged model."
         },
         {
           "id": "guidance_scale",
-          "label": "Guidance Scale",
+          "label": "Motion Guidance Scale",
           "type": "float",
-          "default": 7.0,
+          "default": 5.0,
           "min": 1.0,
-          "max": 10.0
+          "max": 10.0,
+          "step": 0.5,
+          "tooltip": "Classifier-free guidance strength for motion generation. Higher = more literal."
         },
         {
           "id": "num_inference_steps",
-          "label": "Inference Steps",
-          "type": "int",
+          "label": "Motion Quality",
+          "type": "select",
           "default": 25,
-          "min": 10,
-          "max": 50
+          "options": [
+            { "value": 10, "label": "Fast" },
+            { "value": 25, "label": "Balanced" },
+            { "value": 50, "label": "High" }
+          ],
+          "tooltip": "Number of diffusion steps for motion generation."
         },
         {
           "id": "seed",
           "label": "Seed",
           "type": "int",
-          "default": 0,
-          "min": 0,
-          "max": 4294967295
+          "default": -1,
+          "min": -1,
+          "max": 4294967295,
+          "tooltip": "Seed for reproducibility. Set to -1 for a random seed."
         }
       ]
     }
