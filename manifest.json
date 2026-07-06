@@ -21,7 +21,7 @@
       "inputs": ["model", "prompt"],
       "output": "model",
       "hf_repo": "Isabellaliu/RigAnything",
-      "download_check": "riganything/latest.ckpt",
+      "download_check": "riganything/riganything_ckpt.pt",
       "hf_skip_prefixes": [],
       "params_schema": [
         {

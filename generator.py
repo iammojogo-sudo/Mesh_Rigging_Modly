@@ -47,7 +47,7 @@ class RigAnythingMotionGenerator(BaseGenerator):
         check = self.download_check
         if check:
             return (self.model_dir / check).exists()
-        rig_ckpt = self.model_dir / "riganything" / "latest.ckpt"
+        rig_ckpt = self.model_dir / "riganything" / "riganything_ckpt.pt"
         motion_ckpt = self.model_dir / "motion" / HY_MOTION_SUBFOLDER / "latest.ckpt"
         return rig_ckpt.exists() or motion_ckpt.exists()
 
@@ -89,6 +89,13 @@ class RigAnythingMotionGenerator(BaseGenerator):
     ) -> Path:
         if self._model is None:
             self.load()
+
+        if self._device != "cuda":
+            raise RuntimeError(
+                "RigAnything requires a CUDA-capable GPU. "
+                f"Detected device: {self._device}. "
+                "Please run on a system with an NVIDIA GPU."
+            )
 
         params = params or {}
         prompt = params.get("prompt", "").strip()
@@ -164,11 +171,11 @@ class RigAnythingMotionGenerator(BaseGenerator):
             print("[RigAnything] mesh_simplify.py not found; skipping simplification")
             return mesh_path
         cmd = [
-            sys.executable, str(script),
-            "--data_path", str(mesh_path),
+            sys.executable, script.as_posix(),
+            "--data_path", mesh_path.as_posix(),
             "--mesh_simplify", "1",
             "--simplify_count", str(target_faces),
-            "--output_path", str(tmp),
+            "--output_path", tmp.as_posix(),
         ]
         subprocess.run(cmd, check=True)
         result = tmp / f"{mesh_path.stem}_simplified.glb"
@@ -177,25 +184,23 @@ class RigAnythingMotionGenerator(BaseGenerator):
         return mesh_path
 
     def _run_riganything(self, mesh_path: Path, out_dir: Path) -> Path:
-        ckpt = self.model_dir / "riganything" / "latest.ckpt"
+        ckpt = self.model_dir / "riganything" / "riganything_ckpt.pt"
         if not ckpt.exists():
-            ckpt = self.model_dir / "riganything" / "riganything_ckpt.pt"
-            if not ckpt.exists():
-                raise RuntimeError(
-                    "RigAnything checkpoint not found. "
-                    "Try re-downloading the model weights in Modly."
-                )
+            raise RuntimeError(
+                "RigAnything checkpoint not found at " + str(ckpt) + ". "
+                "Try re-downloading the model weights in Modly."
+            )
 
         config = self._rig_src_dir / "config.yaml"
         infer  = self._rig_src_dir / "inference.py"
 
         cmd = [
-            sys.executable, str(infer),
-            "--config", str(config),
-            "--load", str(ckpt),
+            sys.executable, infer.as_posix(),
+            "--config", config.as_posix(),
+            "--load", ckpt.as_posix(),
             "-s", "inference", "true",
-            "-s", "inference_out_dir", str(out_dir),
-            "--mesh_path", str(mesh_path),
+            "-s", "inference_out_dir", out_dir.as_posix(),
+            "--mesh_path", mesh_path.as_posix(),
         ]
         print(f"[RigAnything] Running inference on {mesh_path.name} ...")
         subprocess.run(cmd, check=True)
@@ -209,10 +214,10 @@ class RigAnythingMotionGenerator(BaseGenerator):
         if not vis.exists():
             raise RuntimeError("vis_skel.py not found in RigAnything source")
         cmd = [
-            sys.executable, str(vis),
-            "--data_path", str(npz_path),
-            "--save_path", str(out_dir),
-            "--mesh_path", str(mesh_path),
+            sys.executable, vis.as_posix(),
+            "--data_path", npz_path.as_posix(),
+            "--save_path", out_dir.as_posix(),
+            "--mesh_path", mesh_path.as_posix(),
         ]
         subprocess.run(cmd, check=True)
         rigged = npz_path.with_name(f"{npz_path.stem}_rig.glb")
