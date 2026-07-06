@@ -126,10 +126,19 @@ class RigAnythingGenerator(BaseGenerator):
             "--simplify_count", str(target_faces),
             "--output_path", tmp.as_posix(),
         ]
-        subprocess.run(cmd, check=True)
-        result = tmp / f"{mesh_path.stem}_simplified.glb"
-        if result.exists():
-            return result
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            if result.returncode != 0:
+                print(f"[RigAnything] Mesh simplification failed (stderr): {result.stderr.strip()}")
+                print("[RigAnything] Skipping simplification, using original mesh.")
+                return mesh_path
+        except Exception as e:
+            print(f"[RigAnything] Mesh simplification error: {e}")
+            print("[RigAnything] Skipping simplification, using original mesh.")
+            return mesh_path
+        result_path = tmp / f"{mesh_path.stem}_simplified.glb"
+        if result_path.exists():
+            return result_path
         return mesh_path
 
     def _run_riganything(self, mesh_path: Path, out_dir: Path) -> Path:
