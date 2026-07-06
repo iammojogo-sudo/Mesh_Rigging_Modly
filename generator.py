@@ -47,7 +47,7 @@ class RigAnythingMotionGenerator(BaseGenerator):
         check = self.download_check
         if check:
             return (self.model_dir / check).exists()
-        rig_ckpt = self.model_dir / "riganything" / "riganything_ckpt.pt"
+        rig_ckpt = self.model_dir / "riganything_ckpt.pt"
         motion_ckpt = self.model_dir / "motion" / HY_MOTION_SUBFOLDER / "latest.ckpt"
         return rig_ckpt.exists() or motion_ckpt.exists()
 
@@ -184,7 +184,7 @@ class RigAnythingMotionGenerator(BaseGenerator):
         return mesh_path
 
     def _run_riganything(self, mesh_path: Path, out_dir: Path) -> Path:
-        ckpt = self.model_dir / "riganything" / "riganything_ckpt.pt"
+        ckpt = self.model_dir / "riganything_ckpt.pt"
         if not ckpt.exists():
             raise RuntimeError(
                 "RigAnything checkpoint not found at " + str(ckpt) + ". "
@@ -367,13 +367,11 @@ class RigAnythingMotionGenerator(BaseGenerator):
 
         self.model_dir.mkdir(parents=True, exist_ok=True)
 
-        rig_dir = self.model_dir / "riganything"
-        if not rig_dir.exists() or not any(rig_dir.iterdir()):
-            rig_dir.mkdir(parents=True, exist_ok=True)
+        if not self.is_downloaded():
             print(f"[RigAnything] Downloading RigAnything weights from {RIGANYTHING_HF_REPO} ...")
             snapshot_download(
                 repo_id=RIGANYTHING_HF_REPO,
-                local_dir=str(rig_dir),
+                local_dir=str(self.model_dir),
                 ignore_patterns=["*.md", "LICENSE", "NOTICE", ".gitattributes"],
             )
             print("[RigAnything] RigAnything weights downloaded.")

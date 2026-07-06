@@ -21,7 +21,7 @@
       "inputs": ["mesh", "text"],
       "output": "mesh",
       "hf_repo": "Isabellaliu/RigAnything",
-      "download_check": "riganything/riganything_ckpt.pt",
+      "download_check": "riganything_ckpt.pt",
       "hf_skip_prefixes": [],
       "params_schema": [
         {
