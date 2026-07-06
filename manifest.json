@@ -17,8 +17,8 @@
     {
       "id": "rig_and_motion",
       "name": "Rig & Animate",
-      "input": "model",
-      "inputs": ["model", "prompt"],
+      "input": "mesh",
+      "inputs": ["mesh", "text"],
       "output": "model",
       "hf_repo": "Isabellaliu/RigAnything",
       "download_check": "riganything/riganything_ckpt.pt",
